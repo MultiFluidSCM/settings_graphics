@@ -21,13 +21,14 @@ def make_graphics(id_scm="default"):
     
     print("\nReading data")
     dummy_id = "test"
+    dummy_variable = "$b_w$"
     dummy_settings_scm = 0.8
     dummy_settings_les = np.array([0.4, 0.9])
     
     print("\nProcessing data")
     
     print("\nCreating graphics")
-    plot_graphic(dummy_id, dummy_settings_scm, dummy_settings_les, folder=folder.outputs)
+    plot_graphic(dummy_id, dummy_variable, dummy_settings_scm, dummy_settings_les, folder=folder.outputs)
     
     
     
