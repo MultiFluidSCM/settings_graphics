@@ -3,7 +3,62 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-def plot_graphic(
+def plot_all_transfer_graphics(
+        settings_scm,
+        data_les,
+        folder = "",
+        greyscale = False,
+        dpi = 200
+    ):
+    '''
+    Create multiple graphics for the model settings vs the diagnosed values for various plot ranges.
+    '''
+    scales = ["default", "wide", "wide negative"]
+    
+    for scale in scales:
+        print(f"\nCreating graphics for scale: {scale}")
+        plot_transfer_graphics(
+            settings_scm,
+            data_les,
+            folder = folder,
+            scale = scale,
+            greyscale = greyscale,
+            dpi = dpi
+        )
+    
+def plot_transfer_graphics(
+        settings_scm,
+        data_les,
+        folder = "",
+        scale = "default",
+        greyscale = False,
+        dpi = 200
+    ):
+    '''
+    Create multiple graphics for the model settings vs the diagnosed values.
+    '''
+    folder_scale = os.path.join(folder, scale)
+    if not os.path.isdir(folder_scale):
+        os.makedirs(folder_scale)
+    
+    for transfer in settings_scm:
+        
+        for setting in settings_scm[transfer]:
+            id = "{}_{}".format(transfer, settings_scm[transfer][setting]["name"])
+            
+            plot_transfer_graphic(
+                id,
+                settings_scm[transfer][setting]["symbol"],
+                settings_scm[transfer][setting]["value"], 
+                data_les,
+                folder = folder_scale,
+                scale = scale,
+                greyscale = greyscale,
+                color = (1,0,0),
+                dpi = dpi
+            )
+
+def plot_transfer_graphic(
         id,
         variable,
         data_scm, 
@@ -14,6 +69,10 @@ def plot_graphic(
         color = (1,0,0),
         dpi = 200
     ):
+    '''
+    Create a graphical representation of the transfer parameters used by the model (SCM)
+    and show how this compared with high-resolution data (LES).
+    '''
     
     if greyscale:
         color = (0,0,0)
@@ -43,6 +102,9 @@ def plot_graphic(
     plt.close()
 
 def set_limits(ax, scale):
+    '''
+    From the user settings, setup the axis limits, labels and formating.
+    '''
     limits = {}
     
     # x axis
