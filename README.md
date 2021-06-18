@@ -1,5 +1,21 @@
-# settings_graphics
-Create graphical representation of model settings and how they compare to diagnosed settings from LES.
+# Graphics for model settings
+Scripts for automatically generating graphical representations of the model settings and how they compare to diagnosed values from high-resolution (LES) simulations.
+
+## Sample outputs
+
+### dw/dz detrainment coefficient for moisture (default)
+
+<img src="/readme/prototype_default.png" width="40%">
+
+
+### dw/dz detrainment coefficient for moisture (wider range)
+
+<img src="/readme/prototype_wide.png" width="40%">
+
+
+### dw/dz detrainment coefficient for moisture (wider and negative)
+
+<img src="/readme/prototype_wide_negative.png" width="40%">
 
 # Installation
 Python 3 is required to run these scripts. Install with
@@ -16,7 +32,7 @@ pip3 install scipy
 pip3 install matplotlib
 ```
 
-## Upgrading Python 3 to a newer version
+## Upgrading Python 3 to a newer version (if old version is installed)
 If you need to upgrade to a newer version of Python 3, you can use the following procedure (with the example of Python 3.9):
 ```
 sudo apt-get install software-properties-common
