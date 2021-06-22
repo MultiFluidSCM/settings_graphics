@@ -3,9 +3,11 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
+from ..utilities.stitch_images import stitch_transfer_row, stitch_all
+
 def plot_all_transfer_graphics(
         settings_scm,
-        data_les,
+        data_les_b,
         folder = "",
         greyscale = False,
         dpi = 200
@@ -13,13 +15,13 @@ def plot_all_transfer_graphics(
     '''
     Create multiple graphics for the model settings vs the diagnosed values for various plot ranges.
     '''
-    scales = ["default", "wide", "wide negative"]
+    scales = ["default", "wide", "wide negative", "automatic"]
     
     for scale in scales:
         print(f"\nCreating graphics for scale: {scale}")
         plot_transfer_graphics(
             settings_scm,
-            data_les,
+            data_les_b,
             folder = folder,
             scale = scale,
             greyscale = greyscale,
@@ -28,7 +30,7 @@ def plot_all_transfer_graphics(
     
 def plot_transfer_graphics(
         settings_scm,
-        data_les,
+        data_les_b,
         folder = "",
         scale = "default",
         greyscale = False,
@@ -44,19 +46,24 @@ def plot_transfer_graphics(
     for transfer in settings_scm:
         
         for setting in settings_scm[transfer]:
-            id = "{}_{}".format(transfer, settings_scm[transfer][setting]["name"])
+            id = "{}_{}".format(transfer, settings_scm[transfer][setting]["id"])
             
             plot_transfer_graphic(
                 id,
                 settings_scm[transfer][setting]["symbol"],
                 settings_scm[transfer][setting]["value"], 
-                data_les,
+                get_corresponding_les_data(transfer, settings_scm[transfer][setting]["id"], data_les_b),
                 folder = folder_scale,
                 scale = scale,
                 greyscale = greyscale,
-                color = (1,0,0),
+                color = settings_scm[transfer][setting]["color"],
                 dpi = dpi
             )
+        
+        stitch_transfer_row(folder_scale, transfer, orientation="horizontal", title=settings_scm[transfer][setting]["name"])
+        stitch_transfer_row(folder_scale, transfer, orientation="vertical",   title=settings_scm[transfer][setting]["name"])
+    
+    stitch_all(folder_scale)
 
 def plot_transfer_graphic(
         id,
@@ -73,7 +80,7 @@ def plot_transfer_graphic(
     Create a graphical representation of the transfer parameters used by the model (SCM)
     and show how this compared with high-resolution data (LES).
     '''
-    
+        
     if greyscale:
         color = (0,0,0)
     
@@ -83,11 +90,13 @@ def plot_transfer_graphic(
     fig = plt.figure(figsize=(fig_width/dpi, fig_height/dpi))
     ax = fig.add_subplot(1, 1, 1)
     
-    limits = set_limits(ax, scale)
+    limits = set_limits(ax, scale, data_scm)
     
-    ax.plot([data_scm, data_scm], limits["y_lim"], color="k", linewidth=5., alpha=1.)
-    ax.fill_between(data_les, limits["y_center"], limits["y_top"],    linewidth=2., facecolor=(color[0],color[1],color[2],0.5), edgecolor=(color[0],color[1],color[2],0.8))
-    ax.fill_between(data_les-0.2, limits["y_center"], limits["y_bottom"], linewidth=2., facecolor=(color[0],color[1],color[2],0.5), edgecolor=(color[0],color[1],color[2],0.8))
+    # plot_les_range(ax, data_les, limits, color)
+    plot_les_density(ax, data_les, limits, color)
+    
+    if data_scm >= limits["x_lim"][0] and data_scm <= limits["x_lim"][1]:
+        ax.plot([data_scm, data_scm], limits["y_lim"], color="k", linewidth=5., alpha=1., clip_on=False)
     
     ax.set_title(f"{variable} = {data_scm:.2f}")
     
@@ -101,14 +110,20 @@ def plot_transfer_graphic(
     )
     plt.close()
 
-def set_limits(ax, scale):
+def set_limits(ax, scale, data_scm):
     '''
     From the user settings, setup the axis limits, labels and formating.
     '''
     limits = {}
     
     # x axis
-    if scale == "wide":
+    if scale == "default":
+        x_left = 0
+        x_right = 1
+        limits["x_ticks"] = np.array([0., 0.5, 1.])
+        limits["x_tick_labels"] = ["0","0.5","1"]
+        limits["x_ticks_minor"] = [0.25, 0.75]
+    elif scale == "wide":
         x_left = 0
         x_right = 2
         limits["x_ticks"] = np.array([0., 1., 2.])
@@ -121,11 +136,12 @@ def set_limits(ax, scale):
         limits["x_tick_labels"] = ["-1","0","1","2"]
         limits["x_ticks_minor"] = [-0.5, 0.5, 1.5]
     else:
-        x_left = 0
-        x_right = 1
-        limits["x_ticks"] = np.array([0., 0.5, 1.])
-        limits["x_tick_labels"] = ["0","0.5","1"]
-        limits["x_ticks_minor"] = [0.25, 0.75]
+        if data_scm < 0.:
+            return set_limits(ax, "wide negative", data_scm)
+        elif data_scm > 1.:
+            return set_limits(ax, "wide", data_scm)
+        else:
+            return set_limits(ax, "default", data_scm)
     
     limits["x_lim"] = np.array([x_left, x_right])
     
@@ -197,3 +213,44 @@ def turn_off_axis(ax, axis="y"):
         
         # Remove ticks, tick labels and axis labels
         ax.yaxis.set_tick_params(left=False, right=False, labelbottom=False)
+
+def get_corresponding_les_data(transfer, id, data_les):
+    '''
+    Using the ID for the SCM setting, get the relevant data from the LES
+    '''
+    
+    key = ""
+    if "entrain" in id:
+        key = "b21"
+    elif "detrain" in id:
+        key = "b12"
+    
+    if id[-1] == "w":
+        return data_les[transfer]["plume_edge"]["w"][key]
+    elif id[-1] == "t":
+        return data_les[transfer]["plume_edge"]["theta"][key]
+    elif id[-1] == "u":
+        return data_les[transfer]["plume_edge"]["u"][key]
+    elif id[-1] == "q":
+        return data_les[transfer]["plume_edge"]["qv"][key]
+
+
+def plot_les_range(ax, data_les, limits, color):
+    les_range = np.array([np.min(data_les), np.max(data_les)])
+    les_min = np.max(data_les)
+    
+    ax.fill_between(les_range, limits["y_center"], limits["y_top"],    linewidth=1., facecolor=(color[0],color[1],color[2],0.), edgecolor=(color[0],color[1],color[2],0.8))
+    ax.fill_between(les_range, limits["y_center"], limits["y_bottom"], linewidth=1., facecolor=(color[0],color[1],color[2],0.), edgecolor=(color[0],color[1],color[2],0.8))
+
+
+def plot_les_density(ax, data_les, limits, color):
+    bins = np.linspace(-1, 2, 61)
+    digitized = np.digitize(data_les, bins)
+    # bin_means = np.array([data_les[digitized == i].mean() for i in range(1, len(bins))])
+    bin_sizes = np.array([len(data_les[digitized == i])   for i in range(1, len(bins))])
+    bin_sizes_norm = np.clip(5*bin_sizes/len(data_les), 0., 1.)
+    
+    for i in range(len(bins)-1):
+        ax.fill_between(np.array([bins[i],bins[i+1]]), 0.5*limits["y_bottom"], 0.5*limits["y_top"], facecolor=(color[0],color[1],color[2],bin_sizes_norm[i]), edgecolor=(color[0],color[1],color[2],0.))
+    
+    

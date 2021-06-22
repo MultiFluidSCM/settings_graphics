@@ -48,6 +48,7 @@ def read_settings(file):
                 if is_valid(value):
                     settings[variable] = {}
                     settings[variable]["name"] = variable
+                    settings[variable]["id"] = variable
                     settings[variable]["symbol"] = variable
                     settings[variable]["value"] = eval(value)
     

@@ -12,8 +12,10 @@ import numpy as np
 #User-made modules
 from src.objects.path_setup import path_setup
 from src.plots.plot_transfer_graphic import plot_all_transfer_graphics
-from src.utilities.filter_transfer_coefficients import filter_transfer_coefficients
-from src.utilities.read_transfer_properties import read_transfer_properties
+from src.utilities.filter import filter_transfer_coefficients
+from src.utilities.diagnose_b import diagnose_and_filter_b
+from src.utilities.read_les import read_all_fields
+from src.utilities.read_scm import read_transfer_properties
 
 def make_graphics(id_scm="default"):
     
@@ -27,14 +29,16 @@ def make_graphics(id_scm="default"):
     dummy_settings_scm = 0.8
     dummy_settings_les = np.array([0.4, 0.9])
     
+    data_les = read_all_fields(folder.data_les)
     settings = read_transfer_properties(folder_scm_settings)
     
     print("\nProcessing data")
     settings_transfers = filter_transfer_coefficients(settings)
+    data_les_b = diagnose_and_filter_b(data_les)
     
     print("\nCreating graphics")
     # plot_transfer_graphic(dummy_id, dummy_variable, dummy_settings_scm, dummy_settings_les, folder=folder.outputs)
-    plot_all_transfer_graphics(settings_transfers, dummy_settings_les, folder=os.path.join(folder.outputs, id_scm))
+    plot_all_transfer_graphics(settings_transfers, data_les_b, folder=os.path.join(folder.outputs, id_scm))
     
     
     
