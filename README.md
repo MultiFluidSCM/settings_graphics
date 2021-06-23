@@ -1,21 +1,21 @@
 # Graphics for model settings
-Scripts for automatically generating graphical representations of the model settings and how they compare to diagnosed values from high-resolution (LES) simulations.
+Scripts for automatically generating graphical representations of the model settings (SCM) and how they compare to diagnosed values from high-resolution (LES) simulations.
 
 ## Sample outputs
 
-### dw/dz detrainment coefficient for moisture (default)
+### "Automatic" output in colour
 
-<img src="/readme/prototype_default.png" width="40%">
+The programme will automatically check the SCM settings and plot the relevant range which the setting falls within. Different types of transfer processes are colour coded.
+SCM settings are shown with the black vertical markers. LES diagnostics for that setting are shown by the colours in the background. Darker colour means more data in that binned range.
 
-
-### dw/dz detrainment coefficient for moisture (wider range)
-
-<img src="/readme/prototype_wide.png" width="40%">
+<img src="/readme/settings_horizontal_title_color.png" width="90%">
 
 
-### dw/dz detrainment coefficient for moisture (wider and negative)
+### "Automatic" output in greyscale
 
-<img src="/readme/prototype_wide_negative.png" width="40%">
+To better see the smaller (less probability) LES data diagnostics, it is better to use greyscale.
+
+<img src="/readme/settings_horizontal_title_greyscale.png" width="90%">
 
 # Installation
 Python 3 is required to run these scripts. Install with
