@@ -44,7 +44,7 @@ def stitch_images(files, file_output, orientation="horizontal", padding=0, color
     
     result.save(file_output)
 
-def add_title(file, title, font_size=50, font_color=(0,0,0), background_color=(255,255,255)):
+def add_title(file, title, file_output="", font_size=50, font_color=(0,0,0), background_color=(255,255,255)):
     '''
     Add a title text to the top of an image
     '''
@@ -73,9 +73,11 @@ def add_title(file, title, font_size=50, font_color=(0,0,0), background_color=(2
         
         # Draw the text
         # The stroke arguments make the title bold
-        draw.text(((result_width-text_width)/2, font_size), title, font_color, font=font, stroke_width=1, stroke_fill=font_color)
+        draw.text(((result_width-text_width)/2, font_size/2), title, font_color, font=font, stroke_width=1, stroke_fill=font_color)
         
-        result.save(file)
+        if file_output == "":
+            file_output = file
+        result.save(file_output)
 
 def stitch_transfer_row(folder, transfer, orientation="horizontal", title=""):
     '''
@@ -111,7 +113,7 @@ def stitch_transfer_row(folder, transfer, orientation="horizontal", title=""):
             add_title(file_output, title.replace("entrain","detrain"), font_size=40)
     
 
-def stitch_all(folder):
+def stitch_all(folder, title=""):
     image_list = [
         "settings_horizontal_mixing_bentrain.png",
         "settings_horizontal_mixing_bdetrain.png",
@@ -131,6 +133,10 @@ def stitch_all(folder):
     if len(files) > 1:
         file_output = os.path.join(folder, f"settings_horizontal.png")
         stitch_images(files, file_output, orientation="vertical", padding=0)
+        
+        if title != "":
+            file_title = os.path.join(folder, f"settings_horizontal_title.png")
+            add_title(file_output, title, file_output=file_title, font_size=70)
     
     
     image_list = [
@@ -152,3 +158,7 @@ def stitch_all(folder):
     if len(files) > 1:
         file_output = os.path.join(folder, f"settings_vertical.png")
         stitch_images(files, file_output, orientation="horizontal", padding=0)
+        
+        if title != "":
+            file_title = os.path.join(folder, f"settings_vertical_title.png")
+            add_title(file_output, title, file_output=file_title, font_size=70)

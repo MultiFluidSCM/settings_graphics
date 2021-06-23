@@ -9,6 +9,7 @@ def plot_all_transfer_graphics(
         settings_scm,
         data_les_b,
         folder = "",
+        title = "",
         greyscale = False,
         dpi = 200
     ):
@@ -16,6 +17,7 @@ def plot_all_transfer_graphics(
     Create multiple graphics for the model settings vs the diagnosed values for various plot ranges.
     '''
     scales = ["default", "wide", "wide negative", "automatic"]
+    # scales = ["automatic"]
     
     for scale in scales:
         print(f"\nCreating graphics for scale: {scale}")
@@ -23,6 +25,7 @@ def plot_all_transfer_graphics(
             settings_scm,
             data_les_b,
             folder = folder,
+            title = title,
             scale = scale,
             greyscale = greyscale,
             dpi = dpi
@@ -32,6 +35,7 @@ def plot_transfer_graphics(
         settings_scm,
         data_les_b,
         folder = "",
+        title = "",
         scale = "default",
         greyscale = False,
         dpi = 200
@@ -63,7 +67,7 @@ def plot_transfer_graphics(
         stitch_transfer_row(folder_scale, transfer, orientation="horizontal", title=settings_scm[transfer][setting]["name"])
         stitch_transfer_row(folder_scale, transfer, orientation="vertical",   title=settings_scm[transfer][setting]["name"])
     
-    stitch_all(folder_scale)
+    stitch_all(folder_scale, title=title.replace("_"," ").capitalize())
 
 def plot_transfer_graphic(
         id,
@@ -92,8 +96,8 @@ def plot_transfer_graphic(
     
     limits = set_limits(ax, scale, data_scm)
     
-    # plot_les_range(ax, data_les, limits, color)
-    plot_les_density(ax, data_les, limits, color)
+    # plot_les_range(ax, data_les, limits, color, id)
+    plot_les_density(ax, data_les, limits, color, id)
     
     if data_scm >= limits["x_lim"][0] and data_scm <= limits["x_lim"][1]:
         ax.plot([data_scm, data_scm], limits["y_lim"], color="k", linewidth=5., alpha=1., clip_on=False)
@@ -225,14 +229,25 @@ def get_corresponding_les_data(transfer, id, data_les):
     elif "detrain" in id:
         key = "b12"
     
+    variable = ""
     if id[-1] == "w":
-        return data_les[transfer]["plume_edge"]["w"][key]
+        variable = "w"
     elif id[-1] == "t":
-        return data_les[transfer]["plume_edge"]["theta"][key]
+        variable = "theta"
     elif id[-1] == "u":
-        return data_les[transfer]["plume_edge"]["u"][key]
+        variable = "u"
     elif id[-1] == "q":
-        return data_les[transfer]["plume_edge"]["qv"][key]
+        variable = "qv"
+    
+    data = {}
+    if "plumeEdge" in data_les[transfer]:
+        if variable in data_les[transfer]["plumeEdge"]:
+            data["plumeEdge"] = data_les[transfer]["plumeEdge"][variable][key]
+    if "particles" in data_les[transfer]:
+        if variable in data_les[transfer]["particles"]:
+            data["particles"] = data_les[transfer]["particles"][variable][key]
+    
+    return data
 
 
 def plot_les_range(ax, data_les, limits, color):
@@ -243,7 +258,28 @@ def plot_les_range(ax, data_les, limits, color):
     ax.fill_between(les_range, limits["y_center"], limits["y_bottom"], linewidth=1., facecolor=(color[0],color[1],color[2],0.), edgecolor=(color[0],color[1],color[2],0.8))
 
 
-def plot_les_density(ax, data_les, limits, color):
+def plot_les_density(ax, data_les, limits, color, id):
+    
+    if "plumeEdge" in data_les:
+        if "particles" in data_les:
+            plot_density(ax, data_les["plumeEdge"], 0.5*limits["y_bottom"], limits["y_center"], color)
+        else:
+            plot_density(ax, data_les["plumeEdge"], 0.5*limits["y_bottom"], 0.5*limits["y_top"], color)
+        
+        if "bentraint" in id and "mixing_b" in id:
+            x = limits["x_lim"][0] + 0.02*(limits["x_lim"][1]-limits["x_lim"][0])
+            y = -0.25
+            ax.text(x, y, "Plume edge", ha="left", va="center", fontsize=5, weight="bold")
+    if "particles" in data_les:
+        plot_density(ax, data_les["particles"], limits["y_center"], 0.5*limits["y_top"], color)
+        
+        if "bentraint" in id and "mixing_b" in id:
+            x = limits["x_lim"][0] + 0.02*(limits["x_lim"][1]-limits["x_lim"][0])
+            y = 0.25
+            ax.text(x, y, "Particles", ha="left", va="center", fontsize=5, weight="bold")
+    
+
+def plot_density(ax, data_les, bottom, top, color):
     bins = np.linspace(-1, 2, 61)
     digitized = np.digitize(data_les, bins)
     # bin_means = np.array([data_les[digitized == i].mean() for i in range(1, len(bins))])
@@ -251,6 +287,6 @@ def plot_les_density(ax, data_les, limits, color):
     bin_sizes_norm = np.clip(5*bin_sizes/len(data_les), 0., 1.)
     
     for i in range(len(bins)-1):
-        ax.fill_between(np.array([bins[i],bins[i+1]]), 0.5*limits["y_bottom"], 0.5*limits["y_top"], facecolor=(color[0],color[1],color[2],bin_sizes_norm[i]), edgecolor=(color[0],color[1],color[2],0.))
-    
+        alpha = 0.8*bin_sizes_norm[i]
+        ax.fill_between(np.array([bins[i],bins[i+1]]), bottom, top, facecolor=(color[0],color[1],color[2],alpha), edgecolor=(color[0],color[1],color[2],0.))
     
