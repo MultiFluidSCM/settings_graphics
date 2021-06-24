@@ -8,6 +8,7 @@ from ..utilities.stitch_images import stitch_transfer_row, stitch_all
 def plot_all_transfer_graphics(
         settings_scm,
         data_les_b,
+        settings_scm_old = False,
         folder = "",
         title = "",
         greyscale = False,
@@ -16,7 +17,7 @@ def plot_all_transfer_graphics(
     '''
     Create multiple graphics for the model settings vs the diagnosed values for various plot ranges.
     '''
-    scales = ["default", "wide", "wide_negative", "automatic"]
+    scales = ["automatic", "default", "wide", "wide_negative"]
     # scales = ["automatic"]
     
     for scale in scales:
@@ -24,6 +25,7 @@ def plot_all_transfer_graphics(
         plot_transfer_graphics(
             settings_scm,
             data_les_b,
+            settings_scm_old = settings_scm_old,
             folder = folder,
             title = title,
             scale = scale,
@@ -34,6 +36,7 @@ def plot_all_transfer_graphics(
 def plot_transfer_graphics(
         settings_scm,
         data_les_b,
+        settings_scm_old = False,
         folder = "",
         title = "",
         scale = "default",
@@ -55,11 +58,16 @@ def plot_transfer_graphics(
         for setting in settings_scm[transfer]:
             id = "{}_{}".format(transfer, settings_scm[transfer][setting]["id"])
             
+            data_scm_old = False
+            if type(settings_scm_old) != bool:
+                data_scm_old = settings_scm_old[transfer][setting]["value"]
+            
             plot_transfer_graphic(
                 id,
                 settings_scm[transfer][setting]["symbol"],
                 settings_scm[transfer][setting]["value"], 
                 get_corresponding_les_data(transfer, settings_scm[transfer][setting]["id"], data_les_b),
+                data_scm_old = data_scm_old,
                 folder = folder_scale,
                 scale = scale,
                 greyscale = greyscale,
@@ -67,8 +75,9 @@ def plot_transfer_graphics(
                 dpi = dpi
             )
         
-        stitch_transfer_row(folder_scale, transfer, orientation="horizontal", title=settings_scm[transfer][setting]["name"])
-        stitch_transfer_row(folder_scale, transfer, orientation="vertical",   title=settings_scm[transfer][setting]["name"])
+        if len(settings_scm[transfer]) > 0:
+            stitch_transfer_row(folder_scale, transfer, orientation="horizontal", title=settings_scm[transfer][setting]["name"])
+            stitch_transfer_row(folder_scale, transfer, orientation="vertical",   title=settings_scm[transfer][setting]["name"])
     
     stitch_all(folder_scale, title=title.replace("_"," ").capitalize())
 
@@ -77,6 +86,7 @@ def plot_transfer_graphic(
         variable,
         data_scm, 
         data_les,
+        data_scm_old = False,
         folder = "",
         scale = "default",
         greyscale = False,
@@ -97,11 +107,25 @@ def plot_transfer_graphic(
     fig = plt.figure(figsize=(fig_width/dpi, fig_height/dpi))
     ax = fig.add_subplot(1, 1, 1)
     
-    limits = set_limits(ax, scale, data_scm)
+    limits = set_limits(ax, scale, data_scm, data_scm_old)
     
     # plot_les_range(ax, data_les, limits, color, id)
     plot_les_density(ax, data_les, limits, color, id)
     
+    # Old SCM data
+    if data_scm_old >= limits["x_lim"][0] and data_scm_old <= limits["x_lim"][1]:
+        if type(data_scm_old) != bool:
+            
+            if data_scm_old != data_scm:
+                # Draw old setting
+                ax.plot([data_scm_old, data_scm_old], limits["y_lim"], color="#888888", linewidth=5., alpha=1., clip_on=False)
+                
+                # Draw arrow from old setting to new setting
+                start = data_scm_old + 0.1*(data_scm-data_scm_old)
+                end = data_scm + 0.1*(data_scm_old-data_scm)
+                plt.annotate(text='', xy=(start,0.75), xytext=(end,0.75), arrowprops=dict(arrowstyle='<-'))
+    
+    # Current SCM data
     if data_scm >= limits["x_lim"][0] and data_scm <= limits["x_lim"][1]:
         ax.plot([data_scm, data_scm], limits["y_lim"], color="k", linewidth=5., alpha=1., clip_on=False)
     
@@ -117,11 +141,14 @@ def plot_transfer_graphic(
     )
     plt.close()
 
-def set_limits(ax, scale, data_scm):
+def set_limits(ax, scale, data_scm, data_scm_old):
     '''
     From the user settings, setup the axis limits, labels and formating.
     '''
     limits = {}
+    
+    if type(data_scm_old) == bool:
+        data_scm_old = data_scm
     
     # x axis
     if scale == "default":
@@ -143,12 +170,12 @@ def set_limits(ax, scale, data_scm):
         limits["x_tick_labels"] = ["-1","0","1","2"]
         limits["x_ticks_minor"] = [-0.5, 0.5, 1.5]
     else:
-        if data_scm < 0.:
-            return set_limits(ax, "wide_negative", data_scm)
-        elif data_scm > 1.:
-            return set_limits(ax, "wide", data_scm)
+        if data_scm < 0. or data_scm_old < 0.:
+            return set_limits(ax, "wide_negative", data_scm, data_scm_old)
+        elif data_scm > 1. or data_scm_old > 1.:
+            return set_limits(ax, "wide", data_scm, data_scm_old)
         else:
-            return set_limits(ax, "default", data_scm)
+            return set_limits(ax, "default", data_scm, data_scm_old)
     
     limits["x_lim"] = np.array([x_left, x_right])
     

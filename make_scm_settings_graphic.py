@@ -48,7 +48,7 @@ def make_graphics(id_scm="default", greyscale=False):
 if __name__ == "__main__":
     timeInit = time.time()
     
-    id_scm = "default_simulation_version_2"
+    id_scm = "default_simulation_version_1"
     
     make_graphics(id_scm=id_scm, greyscale=True)
     make_graphics(id_scm=id_scm, greyscale=False)
