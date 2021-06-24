@@ -16,7 +16,7 @@ def plot_all_transfer_graphics(
     '''
     Create multiple graphics for the model settings vs the diagnosed values for various plot ranges.
     '''
-    scales = ["default", "wide", "wide negative", "automatic"]
+    scales = ["default", "wide", "wide_negative", "automatic"]
     # scales = ["automatic"]
     
     for scale in scales:
@@ -43,7 +43,10 @@ def plot_transfer_graphics(
     '''
     Create multiple graphics for the model settings vs the diagnosed values.
     '''
-    folder_scale = os.path.join(folder, scale)
+    if greyscale:
+        folder_scale = os.path.join(folder, f"{scale}_greyscale")
+    else:
+        folder_scale = os.path.join(folder, f"{scale}")
     if not os.path.isdir(folder_scale):
         os.makedirs(folder_scale)
     
@@ -133,7 +136,7 @@ def set_limits(ax, scale, data_scm):
         limits["x_ticks"] = np.array([0., 1., 2.])
         limits["x_tick_labels"] = ["0","1","2"]
         limits["x_ticks_minor"] = [0.5, 1.5]
-    elif scale == "wide negative":
+    elif scale == "wide_negative":
         x_left = -1
         x_right = 2
         limits["x_ticks"] = np.array([-1., 0., 1., 2.])
@@ -141,7 +144,7 @@ def set_limits(ax, scale, data_scm):
         limits["x_ticks_minor"] = [-0.5, 0.5, 1.5]
     else:
         if data_scm < 0.:
-            return set_limits(ax, "wide negative", data_scm)
+            return set_limits(ax, "wide_negative", data_scm)
         elif data_scm > 1.:
             return set_limits(ax, "wide", data_scm)
         else:

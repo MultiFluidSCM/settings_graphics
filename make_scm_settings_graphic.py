@@ -49,9 +49,9 @@ if __name__ == "__main__":
     timeInit = time.time()
     
     id_scm = "default_simulation_version_2"
-    greyscale = True
     
-    make_graphics(id_scm=id_scm, greyscale=greyscale)
+    make_graphics(id_scm=id_scm, greyscale=True)
+    make_graphics(id_scm=id_scm, greyscale=False)
     
     timeElapsed = time.time() - timeInit
     print(f"Elapsed time: {timeElapsed:.2f}s")
