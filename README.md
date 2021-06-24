@@ -1,7 +1,14 @@
 # Graphics for model settings
-Scripts for automatically generating graphical representations of the model settings (SCM) and how they compare to diagnosed values from high-resolution (LES) simulations.
+Programme for automatically generating graphical representations of the single column model (SCM) settings and how they compare to diagnosed values from high-resolution (LES) simulations.
 
-## Sample outputs
+SCM settings which run the [model](https://github.com/MultiFluidSCM/model) should be imported from [MultiFluidSCM/test_cases](https://github.com/MultiFluidSCM/test_cases).
+
+# Contents
+- [Sample outputs](#sample-outputs)
+- [Installation](#installation)
+- [Usage](#usage)
+
+# Sample outputs
 
 ### "Automatic" output in colour
 
@@ -66,3 +73,16 @@ or
 pip3 --version
 ```
 
+# Usage
+
+Copy your test case folder (which includes the model settings) into the data folder as below:
+```
+cp -r path/to/MultiFluidSCM/test_cases/your_test_case_id/ path/to/MultiFluidSCM/settings_graphics/data/scm/
+```
+
+In [make_scm_settings_graphic.py](/make_scm_settings_graphic.py), change ```id_scm``` to ```your_test_case_id```. Then, run the master script with
+```
+python3 path/to/MultiFluidSCM/settings_graphics/make_scm_settings_graphic.py
+```
+
+Data will be output to the outputs folder.
