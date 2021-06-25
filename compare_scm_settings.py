@@ -52,12 +52,30 @@ def make_graphics(id_scm1="default", id_scm2="default", greyscale=False):
 if __name__ == "__main__":
     timeInit = time.time()
     
-    id_scm2 = "default_simulation_version_2"
-    id_scm1 = "default_simulation_version_2p1"
-    # id_scm1 = "default_simulation_version_2p2"
     
-    make_graphics(id_scm1=id_scm1, id_scm2=id_scm2, greyscale=True)
-    make_graphics(id_scm1=id_scm1, id_scm2=id_scm2, greyscale=False)
+    id_scm = [
+        "default_simulation_version_2",
+        "default_simulation_version_2p1p1",
+        "default_simulation_version_2p1p2",
+        "default_simulation_version_2p1p3",
+        "default_simulation_version_2p1p4",
+        "default_simulation_version_2p1p5",
+        "default_simulation_version_2p1p6",
+        "default_simulation_version_2p1p7",
+        "default_simulation_version_2p1p8",
+        "default_simulation_version_2p2",
+        "default_simulation_version_2p2p1",
+        "default_simulation_version_2p2p2",
+        "default_simulation_version_2p2p3",
+        "default_simulation_version_2p2p4",
+    ]
+    
+    for i in range(len(id_scm)-1):
+        id_scm1 = id_scm[i+1]
+        id_scm2 = id_scm[i]
+        
+        make_graphics(id_scm1=id_scm1, id_scm2=id_scm2)
+        make_graphics(id_scm1=id_scm1, id_scm2=id_scm2, greyscale=True)
     
     timeElapsed = time.time() - timeInit
     print(f"Elapsed time: {timeElapsed:.2f}s")

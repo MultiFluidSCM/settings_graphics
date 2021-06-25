@@ -26,8 +26,8 @@ param.bentrainu = 1.0;     % Factor for detrainment of u and v
 param.detrain = true;     % Switch for detrainment
 param.detrain_factor = 1;  % Multiply -dw/dz by this factor
 param.bdetrainw = 1.0;     % Factor for detrainment of w
-param.bdetraint = 1.0;     % Factor for detrainment of eta
-param.bdetrainq = 0.9;     % Factor for detrainment of water
+param.bdetraint = 1.5;     % Factor for detrainment of eta
+param.bdetrainq = 0.8;     % Factor for detrainment of water
 param.bdetrainu = 1.0;     % Factor for detrainment of u and v
 
 end
