@@ -50,8 +50,8 @@ if __name__ == "__main__":
     
     folder = path_setup(__file__)
     
-    id_scm = "default_simulation_version_2"
-    greyscale = True
+    id_scm = "dummy_data_large"
+    greyscale = False
     
     images_h = []
     images_v = []
@@ -59,8 +59,8 @@ if __name__ == "__main__":
         id_les = f"time_{i}"
         make_graphics(folder, id_scm=id_scm, id_les=id_les, greyscale=greyscale)
         
-        images_h.append(os.path.join(folder.outputs, id_les, "automatic", "settings_horizontal_title.png"))
-        images_v.append(os.path.join(folder.outputs, id_les, "automatic", "settings_vertical_title.png"))
+        images_h.append(os.path.join(folder.outputs, id_les, "default", "settings_horizontal_title.png"))
+        images_v.append(os.path.join(folder.outputs, id_les, "default", "settings_vertical_title.png"))
     
     make_gif_from_list(images_h, os.path.join(folder.outputs, "settings_horizontal_title.gif"), duration=500, loop=1)
     make_gif_from_list(images_v, os.path.join(folder.outputs, "settings_vertical_title.gif"),   duration=500, loop=1)

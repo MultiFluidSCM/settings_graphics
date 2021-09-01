@@ -54,20 +54,24 @@ if __name__ == "__main__":
     
     
     id_scm = [
-        "default_simulation_version_2",
-        "default_simulation_version_2p1p1",
-        "default_simulation_version_2p1p2",
-        "default_simulation_version_2p1p3",
-        "default_simulation_version_2p1p4",
-        "default_simulation_version_2p1p5",
-        "default_simulation_version_2p1p6",
-        "default_simulation_version_2p1p7",
-        "default_simulation_version_2p1p8",
-        "default_simulation_version_2p2",
-        "default_simulation_version_2p2p1",
-        "default_simulation_version_2p2p2",
-        "default_simulation_version_2p2p3",
-        "default_simulation_version_2p2p4",
+        "default_simulation_version_0",
+        # "default_simulation_version_1",
+        # "default_simulation_version_2",
+        # "default_simulation_version_2p1p1",
+        # "default_simulation_version_2p1p1_GD",
+        # "default_simulation_version_2p1p2",
+        # "default_simulation_version_2p1p3",
+        # "default_simulation_version_2p1p4",
+        # "default_simulation_version_2p1p5",
+        # "default_simulation_version_2p1p6",
+        # "default_simulation_version_2p1p7",
+        # "default_simulation_version_2p1p8",
+        # "default_simulation_version_2p2",
+        # "default_simulation_version_2p2p1",
+        # "default_simulation_version_2p2p2",
+        # "default_simulation_version_2p2p3",
+        # "default_simulation_version_2p2p4",
+        "default_simulation_version_3",
     ]
     
     for i in range(len(id_scm)-1):
