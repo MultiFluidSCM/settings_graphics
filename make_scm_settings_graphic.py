@@ -35,20 +35,20 @@ def make_graphics(id_scm="default", greyscale=False):
     scm_settings_transfers = filter_transfer_coefficients(scm_settings)
     les_data_b = diagnose_and_filter_b(les_data)
     
-    # print("\nCreating graphics")
-    # plot_all_transfer_graphics(
-        # scm_settings_transfers, 
-        # les_data_b, 
-        # folder = os.path.join(folder.outputs, id_scm), 
-        # title = id_scm,
-        # greyscale = greyscale
-    # )
+    print("\nCreating graphics")
+    plot_all_transfer_graphics(
+        scm_settings_transfers, 
+        les_data_b, 
+        folder = os.path.join(folder.outputs, id_scm), 
+        title = id_scm,
+        greyscale = greyscale
+    )
     
     
     
     
 if __name__ == "__main__":
-    id_scm = "default_simulation_version_1"
+    id_scm = "default_simulation_version_2"
     
     make_graphics(id_scm=id_scm, greyscale=True)
     # make_graphics(id_scm=id_scm, greyscale=False)

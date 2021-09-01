@@ -95,7 +95,7 @@ def filter_b(data_les_plume, data_les):
         for name, filter in filters.items():
             profile_name = f"filter_{name}"
             profile = filter(data_les["z"], z_cloud_base, z_cloud_top)
-            print(profile_name)
+            
             if profile_name not in data_les:
                 data_les[profile_name] = profile.reshape((len(profile), 1))
             

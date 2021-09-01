@@ -255,27 +255,29 @@ def get_corresponding_les_data(transfer, id, data_les):
     
     key = ""
     if "entrain" in id:
-        key = "b21"
+        key = "b{variable}_21_{transfer}"
     elif "detrain" in id:
-        key = "b12"
+        key = "b{variable}_12_{transfer}"
     
     variable = ""
     if id[-1] == "w":
         variable = "w"
     elif id[-1] == "t":
-        variable = "theta"
+        variable = "th"
     elif id[-1] == "u":
         variable = "u"
     elif id[-1] == "q":
         variable = "qv"
     
     data = {}
-    if "plumeEdge" in data_les[transfer]:
-        if variable in data_les[transfer]["plumeEdge"]:
-            data["plumeEdge"] = data_les[transfer]["plumeEdge"][variable][key]
-    if "particles" in data_les[transfer]:
-        if variable in data_les[transfer]["particles"]:
-            data["particles"] = data_les[transfer]["particles"][variable][key]
+    if "plumeEdge" in data_les:
+        key = key.format(variable=variable, transfer=transfer)
+        if key in data_les["plumeEdge"]:
+            data["plumeEdge"] = data_les["plumeEdge"][key]
+    if "particles" in data_les:
+        key = key.format(variable=variable, transfer=transfer)
+        if key in data_les["particles"]:
+            data["particles"] = data_les["particles"][key]
     
     return data
 
