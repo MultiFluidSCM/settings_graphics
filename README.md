@@ -48,9 +48,7 @@ sudo apt-get install python3
 ## Required modules
 Install numpy, scipy and matplotlib using
 ```
-pip3 install numpy
-pip3 install scipy
-pip3 install matplotlib
+pip install -r requirements.txt
 ```
 
 ## Upgrading Python 3 to a newer version (if old version is installed)
