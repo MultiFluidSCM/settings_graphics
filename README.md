@@ -10,7 +10,7 @@ SCM settings which run the [model](https://github.com/MultiFluidSCM/model) shoul
 
 # Sample outputs
 
-### "Automatic" output in colour
+### "Automatic" output in colour using ```make_scm_settings_graphic.py```
 
 The programme will automatically check the SCM settings and plot the relevant range which the setting falls within. Different types of transfer processes are colour coded.
 SCM settings are shown with the black vertical markers. LES diagnostics for that setting are shown by the colours in the background. Darker colour means more data in that binned range.
@@ -18,11 +18,25 @@ SCM settings are shown with the black vertical markers. LES diagnostics for that
 <img src="/readme/settings_horizontal_title_color.png" width="90%">
 
 
-### "Automatic" output in greyscale
+### "Automatic" output in greyscale using ```make_scm_settings_graphic.py```
 
 To better see the smaller (less probability) LES data diagnostics, it is better to use greyscale.
 
 <img src="/readme/settings_horizontal_title_greyscale.png" width="90%">
+
+
+### Comparing model configurations using ```compare_scm_settings.py```
+
+Two model configurations can be compared to make it easier to track changes to the model settings as they are tuned. The graphics show the old settings in grey, the new settings in black, and an arrow to make it clear in what directions the settings have been shifted.
+
+<img src="/readme/settings_horizontal_color_comparison.png" width="90%">
+
+
+### Visualising the transfer regions using ```plot_les_transfer_regions.py```
+
+The different colors in the settings graphics correspond to different transfer processes which occur at different altitudes. These regions can be visualised with the ```plot_les_transfer_regions.py``` script. The colors in the resulting image correspond to the colors used in the (non-greyscale) settings graphics. 
+
+<img src="/readme/transfer_regions_plumeEdge.png" width="90%">
 
 # Installation
 Python 3 is required to run these scripts. Install with
@@ -83,6 +97,16 @@ cp -r path/to/MultiFluidSCM/test_cases/your_test_case_id/ path/to/MultiFluidSCM/
 In [make_scm_settings_graphic.py](/make_scm_settings_graphic.py), change ```id_scm``` to ```your_test_case_id```. Then, run the master script with
 ```
 python3 path/to/MultiFluidSCM/settings_graphics/make_scm_settings_graphic.py
+```
+
+In [compare_scm_settings.py](/compare_scm_settings.py), change ```id_scm1``` to the ID of the new model settings and ```id_scm2``` to the ID of the old model settings. Then, run the master script with
+```
+python3 path/to/MultiFluidSCM/settings_graphics/compare_scm_settings.py
+```
+
+For [plot_les_transfer_regions.py](/plot_les_transfer_regions.py), simply run the master script with
+```
+python3 path/to/MultiFluidSCM/settings_graphics/plot_les_transfer_regions.py
 ```
 
 Data will be output to the outputs folder.
