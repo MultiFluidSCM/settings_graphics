@@ -51,7 +51,7 @@ def b_coefficients(a1, a2, a12, a21):
     return b12, b21
 
 
-def filter_b(data_les_plume, data_les):
+def filter_b(data_les_plume, data_les, bl_default=850.):
     
     variables = ["w", "qv", "th"]
     
@@ -81,7 +81,7 @@ def filter_b(data_les_plume, data_les):
         
         # If no cloud detected, set as the approx. boundary layer height to keep the process going
         if len(z_cloud) == 0:
-            z_cloud = [900]
+            z_cloud = [bl_default]
         
         
         z_cloud_base = np.min(z_cloud)
@@ -134,4 +134,5 @@ def filter_instability(z, z_cloud_base, z_cloud_top):
     return (z < 0.5*z_cloud_base)
 
 def filter_dwdz(z, z_cloud_base, z_cloud_top):
-    return (z > 0.5*z_cloud_base)*(z < 1.2*z_cloud_base) + (z >= z_cloud_top - 0.2*(z_cloud_top-z_cloud_base))
+    return (z > 0.5*z_cloud_base)*(z < 1.2*z_cloud_base) + \
+           (z >= z_cloud_top - 0.2*(z_cloud_top-z_cloud_base))*(z <= z_cloud_top + 0.4*(z_cloud_top-z_cloud_base))
