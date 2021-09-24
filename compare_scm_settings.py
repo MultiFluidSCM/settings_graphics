@@ -57,7 +57,9 @@ if __name__ == "__main__":
         # "default_simulation_version_2",
         # "default_simulation_version_2p1p1",
         # "default_simulation_version_2p1p8",
-        "default_simulation_version_3",
+        # "default_simulation_version_3",
+        # "default_simulation_version_3_GD",
+        "default_LES",
     ]
     
     for i in range(len(id_scm)-1):

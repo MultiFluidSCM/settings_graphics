@@ -1,7 +1,7 @@
-function param = set_transfer_properties_mixing_cloud( )
+function param = set_transfer_properties_dwdz( )
 
 % Set coefficients for entrained and detrained fluid properties for
-% mixing (turbulent) entrainment/detrainment.
+% entrainment/detrainment proportional to vertical convergence.
 % Value of 1 means property of departed fluid does not change
 % Value of 0 means property of receiving fluid does not change
 
@@ -11,17 +11,22 @@ function param = set_transfer_properties_mixing_cloud( )
 % It appears to be less of a problem in more realistic cases that spin
 % up more gradually.
 
+% Choose properties to transfer based on the pdf limits (not on the b coefficients below)
+param.use_pdf = true;
+
 % Entrainment
-param.entrain = true;      % Switch for entrainment 
-param.bentrainw = 1.0;     % Factor for entrainment of w
+param.entrain = false;     % Switch for entrainment
+param.entrain_factor = 1;  % Multiply -dw/dz by this factor
+param.bentrainw = 0.5;     % Factor for entrainment of w
 param.bentraint = 1.0;     % Factor for entrainment of eta
 param.bentrainq = 1.0;     % Factor for entrainment of water
 param.bentrainu = 1.0;     % Factor for detrainment of u and v
 
 % Detrainment
-param.detrain = true;      % Switch for detrainment
+param.detrain = true;     % Switch for detrainment
+param.detrain_factor = 1;  % Multiply -dw/dz by this factor
 param.bdetrainw = 1.0;     % Factor for detrainment of w
-param.bdetraint = 1.0;     % Factor for detrainment of eta
+param.bdetraint = 1.5;     % Factor for detrainment of eta
 param.bdetrainq = 1.0;     % Factor for detrainment of water
 param.bdetrainu = 1.0;     % Factor for detrainment of u and v
 
