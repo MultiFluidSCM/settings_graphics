@@ -114,13 +114,22 @@ def stitch_transfer_row(folder, transfer, orientation="horizontal", title=""):
     
 
 def stitch_all(folder, title=""):
+    # image_list = [
+        # "settings_horizontal_mixing_bentrain.png",
+        # "settings_horizontal_mixing_bdetrain.png",
+        # "settings_horizontal_mixing_cloud_bentrain.png",
+        # "settings_horizontal_mixing_cloud_bdetrain.png",
+        # "settings_horizontal_instability_bentrain.png",
+        # "settings_horizontal_dwdz_bdetrain.png"
+    # ]
+    
     image_list = [
-        "settings_horizontal_mixing_bentrain.png",
-        "settings_horizontal_mixing_bdetrain.png",
+        "settings_horizontal_dwdz_bdetrain.png",
         "settings_horizontal_mixing_cloud_bentrain.png",
         "settings_horizontal_mixing_cloud_bdetrain.png",
+        "settings_horizontal_mixing_bentrain.png",
+        "settings_horizontal_mixing_bdetrain.png",
         "settings_horizontal_instability_bentrain.png",
-        "settings_horizontal_dwdz_bdetrain.png"
     ]
     
     files = []

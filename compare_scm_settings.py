@@ -52,14 +52,14 @@ def compare_scm_settings(id_scm1="default", id_scm2="default", greyscale=False):
     
 if __name__ == "__main__":
     id_scm = [
-        "default_simulation_version_0",
+        # "default_simulation_version_0",
         # "default_simulation_version_1",
         # "default_simulation_version_2",
         # "default_simulation_version_2p1p1",
         # "default_simulation_version_2p1p8",
-        # "default_simulation_version_3",
-        # "default_simulation_version_3_GD",
-        "default_LES",
+        "default_simulation_version_3",
+        "default_simulation_version_3p2",
+        # "default_LES",
     ]
     
     for i in range(len(id_scm)-1):
