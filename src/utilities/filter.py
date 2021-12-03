@@ -30,7 +30,7 @@ def filter_transfer_coefficients(settings):
         "mixing": "Mid-BL",
         "mixing_cloud": "Mid-CL",
         "instability": "Surface",
-        "dwdz": "BL/CL Top",
+        "dwdz": "BL/CL top",
     }
     
     settings_transfers = {}

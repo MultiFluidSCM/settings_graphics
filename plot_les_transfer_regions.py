@@ -44,3 +44,4 @@ def plot_les_regions(id_scm="default", greyscale=False):
     
 if __name__ == "__main__":
     plot_les_regions()
+    plot_les_regions(greyscale=True)

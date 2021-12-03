@@ -55,7 +55,7 @@ def make_scm_graphic(id_scm="default", greyscale=False):
     
     
 if __name__ == "__main__":
-    id_scm = "default_simulation_version_3p2"
+    id_scm = "default_simulation_version_3p2p9"
     
     make_scm_graphic(id_scm=id_scm, greyscale=True)
     make_scm_graphic(id_scm=id_scm, greyscale=False)

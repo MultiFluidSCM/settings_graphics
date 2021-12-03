@@ -129,7 +129,10 @@ def plot_transfer_graphic(
     if data_scm >= limits["x_lim"][0] and data_scm <= limits["x_lim"][1]:
         ax.plot([data_scm, data_scm], limits["y_lim"], color="k", linewidth=5., alpha=1., clip_on=False)
     
-    ax.set_title(f"{variable} = {data_scm:.2f}")
+    if data_scm >= -1 and data_scm <= 2:
+        ax.set_title(f"{variable} = {data_scm:.1f}")
+    else:
+        ax.set_title(variable)
     
     center_axis(ax)
     turn_off_axis(ax, axis="y")
@@ -298,17 +301,19 @@ def plot_les_density(ax, data_les, limits, color, id):
         else:
             plot_density(ax, data_les["plumeEdge"], 0.5*limits["y_bottom"], 0.5*limits["y_top"], color)
         
-        if "bentraint" in id and "mixing_b" in id:
-            x = limits["x_lim"][0] + 0.02*(limits["x_lim"][1]-limits["x_lim"][0])
-            y = -0.25
-            ax.text(x, y, "Plume edge", ha="left", va="center", fontsize=5, weight="bold")
+        # if "bentraint" in id and "mixing_b" in id:
+        if "bdetraint" in id and "dwdz_b" in id:
+            x = limits["x_lim"][0] + 0.015*(limits["x_lim"][1]-limits["x_lim"][0])
+            y = -0.65
+            ax.text(x, y, "PLUME EDGE", ha="left", va="center", fontsize=7, weight="bold")
     if "particles" in data_les:
         plot_density(ax, data_les["particles"], limits["y_center"], 0.5*limits["y_top"], color)
         
-        if "bentraint" in id and "mixing_b" in id:
-            x = limits["x_lim"][0] + 0.02*(limits["x_lim"][1]-limits["x_lim"][0])
-            y = 0.25
-            ax.text(x, y, "Particles", ha="left", va="center", fontsize=5, weight="bold")
+        # if "bentraint" in id and "mixing_b" in id:
+        if "bdetraint" in id and "dwdz_b" in id:
+            x = limits["x_lim"][0] + 0.015*(limits["x_lim"][1]-limits["x_lim"][0])
+            y = 0.6
+            ax.text(x, y, "PARTICLES", ha="left", va="center", fontsize=7, weight="bold")
     
 
 def plot_density(ax, data_les, bottom, top, color):

@@ -57,8 +57,14 @@ if __name__ == "__main__":
         # "default_simulation_version_2",
         # "default_simulation_version_2p1p1",
         # "default_simulation_version_2p1p8",
-        "default_simulation_version_3",
+        # "default_simulation_version_3",
         "default_simulation_version_3p2",
+        # "default_simulation_version_3p2p1",
+        # "default_simulation_version_3p2p6",
+        # "default_simulation_version_3p2p7",
+        # "default_simulation_version_3p2p8",
+        "default_simulation_version_3p2p9",
+        # "default_simulation_version_3p3",
         # "default_LES",
     ]
     

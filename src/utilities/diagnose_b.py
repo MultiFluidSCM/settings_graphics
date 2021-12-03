@@ -99,7 +99,9 @@ def filter_b(data_les_plume, data_les, bl_default=850.):
         
         z_cloud_base = np.min(z_cloud)
         z_cloud_top  = np.max(z_cloud)
-        z_bl_top     = z[np.argmin(wth_res)]
+        z_bl_top     = z[np.argmin(wth_res)][0]
+        
+        z_star = max(z_bl_top, z_cloud_base)
         
         z_cloud_top = max(z_cloud_top, z_cloud_base)
         
@@ -111,7 +113,7 @@ def filter_b(data_les_plume, data_les, bl_default=850.):
         
         for name, filter in filters.items():
             profile_name = f"filter_{name}"
-            profile = filter(data_les["z"], z_bl_top, z_cloud_top)
+            profile = filter(data_les["z"], z_star, z_cloud_top)
             
             if profile_name not in data_les:
                 data_les[profile_name] = profile.reshape((len(profile), 1))
@@ -145,11 +147,11 @@ def filter_mixing(z, z_bl_top, z_cloud_top):
     return (z >= 0.25*z_bl_top) * (z <= 0.75*z_bl_top)
 
 def filter_mixing_cloud(z, z_bl_top, z_cloud_top):
-    return (z >= z_bl_top + 0.25*(z_cloud_top-z_bl_top)) * (z <= z_cloud_top - 0.25*(z_cloud_top-z_bl_top))
+    return (z >= 1.1*z_bl_top) * (z <= z_cloud_top - 0.25*(z_cloud_top-z_bl_top))
 
 def filter_instability(z, z_bl_top, z_cloud_top):
     return (z <= 0.25*z_bl_top)
 
 def filter_dwdz(z, z_bl_top, z_cloud_top):
-    return (z >= 0.75*z_bl_top)*(z <= z_bl_top + 0.25*(z_cloud_top-z_bl_top)) + \
-           (z >= z_cloud_top - 0.25*(z_cloud_top-z_bl_top))*(z <= z_cloud_top + 0.25*(z_cloud_top-z_bl_top))
+    return (z >= 0.75*z_bl_top)*(z <= 1.1*z_bl_top) + \
+           (z >= z_cloud_top - 0.25*(z_cloud_top-z_bl_top))*(z <= 1.1*z_cloud_top)
