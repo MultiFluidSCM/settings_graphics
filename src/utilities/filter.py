@@ -33,6 +33,20 @@ def filter_transfer_coefficients(settings):
         "dwdz": "BL/CL top",
     }
     
+    symbols_entrain = {
+        "w": "$b_{w,21}^{%s}$",
+        "t": "$b_{\\eta,21}^{%s}$",
+        "q": "$b_{q,21}^{%s}$",
+        "u": "$b_{u,21}^{%s}$",
+    }
+    
+    symbols_detrain = {
+        "w": "$b_{w,12}^{%s}$",
+        "t": "$b_{\\eta,12}^{%s}$",
+        "q": "$b_{q,12}^{%s}$",
+        "u": "$b_{u,12}^{%s}$",
+    }
+    
     settings_transfers = {}
     
     for transfer in settings:
@@ -58,7 +72,7 @@ def filter_transfer_coefficients(settings):
                         settings_transfers[transfer][setting]["name"] = "{} entrain".format(name)
                         settings_transfers[transfer][setting]["color"] = color
                         settings_transfers[transfer][setting]["type"] = "b21"
-                        settings_transfers[transfer][setting]["symbol"] = "$b_{%s,21}^{%s}$" % (setting[-1], superscript)
+                        settings_transfers[transfer][setting]["symbol"] = symbols_entrain[setting[-1]] % (superscript)
             elif "bdetrain" in setting:
                 if "detrain" in settings[transfer]:
                     if settings[transfer]["detrain"]["value"]:
@@ -66,6 +80,6 @@ def filter_transfer_coefficients(settings):
                         settings_transfers[transfer][setting]["name"] = "{} detrain".format(name)
                         settings_transfers[transfer][setting]["color"] = color
                         settings_transfers[transfer][setting]["type"] = "b12"
-                        settings_transfers[transfer][setting]["symbol"] = "$b_{%s,12}^{%s}$" % (setting[-1], superscript)
+                        settings_transfers[transfer][setting]["symbol"] = symbols_detrain[setting[-1]] % (superscript)
     
     return settings_transfers
