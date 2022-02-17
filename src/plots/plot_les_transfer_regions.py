@@ -12,12 +12,16 @@ def plot_les_transfer_regions(
         folder = "",
         id = "",
         greyscale = False,
+        shapes = False,
         dpi = 300
     ):
     '''
     Plot the cloud base and top, as well as the regions in which the different transfer processes
     are assumed to operate in.
     '''
+    
+    if greyscale:
+        shapes = True
     
     t = data_les["times"][0]/3600.
     z = data_les["z"][:,0]/1000.
@@ -43,6 +47,20 @@ def plot_les_transfer_regions(
         ax.contour (t, z, gaussian_filter(1.01*data_les["filter_instability"], filter_sigma),  **kwargs, colors="#333333")
         ax.contour (t, z, gaussian_filter(1.01*data_les["filter_mixing"], filter_sigma),       **kwargs, colors="grey")
         ax.contour (t, z, gaussian_filter(1.01*data_les["filter_mixing_cloud"], filter_sigma), **kwargs, colors="grey")
+    elif shapes:
+        kwargs = dict(levels=[0.9, 1.1], alpha=0.9, linewidths=0.5)
+        
+        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_dwdz"], filter_sigma),         **kwargs, cmap="Greens")
+        plt.rcParams['hatch.color'] = "red"
+        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_instability"], filter_sigma),  **kwargs, cmap="Reds", hatches=["/"])
+        plt.rcParams['hatch.color'] = "magenta"
+        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_mixing"], filter_sigma),       **kwargs, cmap="Purples", hatches=["O"])
+        plt.rcParams['hatch.color'] = "blue"
+        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_mixing_cloud"], filter_sigma), **kwargs, cmap="Blues", hatches=["O."])
+        ax.contour (t, z, gaussian_filter(1.01*data_les["filter_dwdz"], filter_sigma),         **kwargs, colors="green")
+        ax.contour (t, z, gaussian_filter(1.01*data_les["filter_instability"], filter_sigma),  **kwargs, colors="red")
+        ax.contour (t, z, gaussian_filter(1.01*data_les["filter_mixing"], filter_sigma),       **kwargs, colors="magenta")
+        ax.contour (t, z, gaussian_filter(1.01*data_les["filter_mixing_cloud"], filter_sigma), **kwargs, colors="blue")
     else:
         kwargs = dict(levels=[0.9, 1.1], alpha=0.9, linewidths=1)
         ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_dwdz"], filter_sigma),         **kwargs, cmap="Greens")
@@ -70,6 +88,15 @@ def plot_les_transfer_regions(
            Patch(facecolor="white", edgecolor="grey", hatch="OO",  label='Mid-BL mixing'),
            Patch(facecolor="#333333", edgecolor="#333333", label='Surface entrainment'),
         ]
+    elif shapes:
+        legend_elements = [
+           Line2D([0], [0], color="k", label='Cloud base/top'),
+           Line2D([0], [0], color="k", label='BL top', linestyle=":"),
+           Patch(facecolor=(0.5, 0.8, 0.5, 0.8), edgecolor="green", label='BL/CL top detrainment'),
+           Patch(facecolor=(0.5, 0.8,   1, 0.8), edgecolor="blue", hatch="O.O.", label='Mid-cloud mixing'),
+           Patch(facecolor=(0.9, 0.4, 0.8, 0.8), edgecolor="magenta", hatch="OO",  label='Mid-BL mixing'),
+           Patch(facecolor=(  1, 0.3, 0.3, 0.8), edgecolor="red", hatch="//", label='Surface entrainment'),
+        ]
     else:
         legend_elements = [
            Line2D([0], [0], color="k", label='Cloud base/top'),
@@ -92,6 +119,8 @@ def plot_les_transfer_regions(
     filename = f"transfer_regions_{id}"
     if greyscale:
         filename += "_greyscale"
+    if shapes:
+        filename += "_shapes"
     fig.savefig(
         os.path.join(folder, f"{filename}.png"),
         bbox_inches = "tight",

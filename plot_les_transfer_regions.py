@@ -12,7 +12,7 @@ from src.utilities.read_les import read_les
 from src.utilities.time_elapsed import time_elapsed
 
 @time_elapsed
-def plot_les_regions(id_scm="default", greyscale=False):
+def plot_les_regions(id_scm="default", greyscale=False, shapes=False):
     '''
     Plot the regions of the LES data where different transfer phenomena are classified.
     
@@ -34,7 +34,8 @@ def plot_les_regions(id_scm="default", greyscale=False):
             les_data[transfer], 
             folder    = folder.outputs, 
             id        = transfer,
-            greyscale = greyscale
+            greyscale = greyscale,
+            shapes    = shapes
         )
     
     return les_data
@@ -44,4 +45,5 @@ def plot_les_regions(id_scm="default", greyscale=False):
     
 if __name__ == "__main__":
     plot_les_regions()
+    plot_les_regions(shapes=True)
     plot_les_regions(greyscale=True)
