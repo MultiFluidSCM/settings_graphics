@@ -54,9 +54,9 @@ def plot_les_transfer_regions(
         plt.rcParams['hatch.color'] = "red"
         ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_instability"], filter_sigma),  **kwargs, cmap="Reds", hatches=["/"])
         plt.rcParams['hatch.color'] = "magenta"
-        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_mixing"], filter_sigma),       **kwargs, cmap="Purples", hatches=["O"])
+        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_mixing"], filter_sigma),       **kwargs, cmap="Purples", hatches=["OOO"])
         plt.rcParams['hatch.color'] = "blue"
-        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_mixing_cloud"], filter_sigma), **kwargs, cmap="Blues", hatches=["O."])
+        ax.contourf(t, z, gaussian_filter(1.01*data_les["filter_mixing_cloud"], filter_sigma), **kwargs, cmap="Blues", hatches=["O.O.O."])
         ax.contour (t, z, gaussian_filter(1.01*data_les["filter_dwdz"], filter_sigma),         **kwargs, colors="green")
         ax.contour (t, z, gaussian_filter(1.01*data_les["filter_instability"], filter_sigma),  **kwargs, colors="red")
         ax.contour (t, z, gaussian_filter(1.01*data_les["filter_mixing"], filter_sigma),       **kwargs, colors="magenta")
@@ -93,9 +93,9 @@ def plot_les_transfer_regions(
            Line2D([0], [0], color="k", label='Cloud base/top'),
            Line2D([0], [0], color="k", label='BL top', linestyle=":"),
            Patch(facecolor=(0.5, 0.8, 0.5, 0.8), edgecolor="green", label='BL/CL top detrainment'),
-           Patch(facecolor=(0.5, 0.8,   1, 0.8), edgecolor="blue", hatch="O.O.", label='Mid-cloud mixing'),
-           Patch(facecolor=(0.9, 0.4, 0.8, 0.8), edgecolor="magenta", hatch="OO",  label='Mid-BL mixing'),
-           Patch(facecolor=(  1, 0.3, 0.3, 0.8), edgecolor="red", hatch="//", label='Surface entrainment'),
+           Patch(facecolor=(0.5, 0.8,   1, 0.8), edgecolor="blue", hatch="O.O.O.", label='Mid-cloud mixing'),
+           Patch(facecolor=(0.9, 0.4, 0.8, 0.8), edgecolor="magenta", hatch="OOO",  label='Mid-BL mixing'),
+           Patch(facecolor=(  1, 0.3, 0.3, 0.8), edgecolor="red", hatch="///", label='Surface entrainment'),
         ]
     else:
         legend_elements = [
